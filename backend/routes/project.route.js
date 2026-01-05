@@ -1,5 +1,5 @@
 import express from "express";
-import { createProject, getAllProjectsAdmin, getProjectsByClient, getSingleProjectAdmin, getMyProjects, getSingleProjectDeveloper, addDeveloperToProject, removeDeveloperFromProject, updateDeploymentLinks, addProjectDocument, updateProjectProgress, toggleProjectLock } from "../controllers/project.controller.js";
+import { createProject, getAllProjectsAdmin, getProjectsByClient, getSingleProjectAdmin, getMyProjects, getSingleProjectDeveloper, addDeveloperToProject, removeDeveloperFromProject, updateDeploymentLinks, addProjectDocument, updateProjectProgress, toggleProjectLock, updateProjectHosting } from "../controllers/project.controller.js";
 import { isAuthenticated, isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.patch("/:projectId/progress", isAuthenticated, isAdmin, updateProjectProg
 
 router.patch("/:projectId/deployment-links", isAuthenticated, isAdmin, updateDeploymentLinks);
 router.patch("/:projectId/toggle-lock", isAuthenticated, isAdmin, toggleProjectLock);
-
+router.patch("/:projectId/hosting", isAuthenticated, isAdmin, updateProjectHosting);
 //DEVELOPER
 router.get("/my", isAuthenticated, getMyProjects);
 router.get("/my/:projectId", isAuthenticated, getSingleProjectDeveloper);

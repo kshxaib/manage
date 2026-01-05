@@ -26,10 +26,10 @@ export const createProject = async (req, res) => {
       createdBy: req.user._id
     });
 
-    res.status(201).json({ 
-      success: true, 
-      message: "Project created successfully", 
-      project 
+    res.status(201).json({
+      success: true,
+      message: "Project created successfully",
+      project
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -162,7 +162,7 @@ export const addProjectDocument = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
-}; 
+};
 
 export const updateProjectProgress = async (req, res) => {
   const { projectId } = req.params;
@@ -170,7 +170,7 @@ export const updateProjectProgress = async (req, res) => {
 
   try {
     const project = await Project.findById(projectId);
-    if (!project){
+    if (!project) {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
 
@@ -226,6 +226,55 @@ export const updateDeploymentLinks = async (req, res) => {
       success: true,
       message: "Deployment links updated successfully",
       deploymentLinks: project.deploymentLinks
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+export const updateProjectHosting = async (req, res) => {
+  const { projectId } = req.params;
+  const { backendHosting, database, domainName } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found"
+      });
+    }
+
+    if (project.isLocked) {
+      return res.status(403).json({
+        success: false,
+        message: "Project is locked"
+      });
+    }
+
+    if (backendHosting !== undefined) {
+      project.hosting.backendHosting = backendHosting;
+    }
+
+    if (database !== undefined) {
+      project.hosting.database = database;
+    }
+
+    if (domainName !== undefined) {
+      project.hosting.domainName = domainName;
+    }
+
+    await project.save();
+
+    return res.json({
+      success: true,
+      message: "Hosting details updated successfully",
+      hosting: project.hosting
     });
 
   } catch (error) {

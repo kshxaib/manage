@@ -123,7 +123,22 @@ const projectSchema = new mongoose.Schema({
   },
 
   deploymentLinks: {
-    type: [String] // web URL OR app store links
+    type: [String] 
+  },
+
+  hosting: {
+  backendHosting: {
+    type: String,
+    trim: true
+  },
+  database: {
+    type: String, 
+    trim: true
+  },
+  domainName: {
+    type: String, 
+    trim: true
+  }
   },
 
   isLocked: {
