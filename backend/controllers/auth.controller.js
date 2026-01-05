@@ -85,10 +85,11 @@ export const createUser = async (req, res) => {
     }
 
     const allowedRoles = [
-      "BACKEND_DEV_WEB",
-      "FRONTEND_DEV_WEB",
-      "MOBILE_DEV_EXPO",
-      "UI_UX_DESIGNER"
+      "BACKEND",
+      "FRONTEND",
+      "FULLSTACK",
+      "MOBILE",
+      "DESIGNER"
     ];
 
     if (!allowedRoles.includes(role)) {

@@ -23,12 +23,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: [
             "ADMIN",
-            "BACKEND_DEV_WEB",
-            "FRONTEND_DEV_WEB",
-            "MOBILE_DEV_EXPO",
-            "UI_UX_DESIGNER"
+            "BACKEND",
+            "FRONTEND",
+            "FULLSTACK",
+            "MOBILE",
+            "DESIGNER"
         ],
-        default: "FRONTEND_DEV_WEB"
+        default: "FRONTEND"
     },
     isActive: {
         type: Boolean,

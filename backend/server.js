@@ -1,10 +1,11 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import { connectDB } from "./utils/db.js";
 import cors from "cors";
 import dotenv from "dotenv";
+import { connectDB } from "./utils/db.js";
 import authRouter from "./routes/auth.route.js"
 import clientRouter from "./routes/client.route.js"
+import projectRouter from "./routes/project.route.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.get("/healthcheck", (req, res) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/clients", clientRouter);
+app.use("/api/v1/projects", projectRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
