@@ -126,6 +126,11 @@ const projectSchema = new mongoose.Schema({
     type: [String] // web URL OR app store links
   },
 
+  isLocked: {
+    type: Boolean,
+    default: false
+  },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

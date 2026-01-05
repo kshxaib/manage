@@ -53,6 +53,10 @@ export const addDeveloperToProject = async (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
 
+    if (project.isLocked) {
+      return res.status(403).json({ message: "Project is locked" });
+    }
+
     const developer = await User.findById(developerId);
     if (!developer || developer.role === "ADMIN") {
       return res.status(400).json({
@@ -101,6 +105,10 @@ export const removeDeveloperFromProject = async (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
 
+    if (project.isLocked) {
+      return res.status(403).json({ message: "Project is locked" });
+    }
+
     const beforeCount = project.assignedDevelopers.length;
 
     project.assignedDevelopers = project.assignedDevelopers.filter(
@@ -138,6 +146,10 @@ export const addProjectDocument = async (req, res) => {
     const project = await Project.findById(projectId);
     if (!project) return res.status(404).json({ success: false, message: "Project not found" });
 
+    if (project.isLocked) {
+      return res.status(403).json({ message: "Project is locked" });
+    }
+
     project.documents.push({
       type,
       title,
@@ -160,6 +172,10 @@ export const updateProjectProgress = async (req, res) => {
     const project = await Project.findById(projectId);
     if (!project){
       return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    if (project.isLocked) {
+      return res.status(403).json({ message: "Project is locked" });
     }
 
     if (status) project.status = status;
@@ -198,6 +214,10 @@ export const updateDeploymentLinks = async (req, res) => {
       });
     }
 
+    if (project.isLocked) {
+      return res.status(403).json({ message: "Project is locked" });
+    }
+
     project.deploymentLinks = deploymentLinks;
 
     await project.save();
@@ -213,6 +233,29 @@ export const updateDeploymentLinks = async (req, res) => {
       success: false,
       message: "Internal server error"
     });
+  }
+};
+
+export const toggleProjectLock = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    project.isLocked = !project.isLocked;
+
+    await project.save();
+
+    return res.json({
+      success: true,
+      message: `Project ${project.isLocked ? "locked" : "unlocked"} successfully`,
+      isLocked: project.isLocked
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
