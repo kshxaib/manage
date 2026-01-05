@@ -31,7 +31,37 @@ const paymentSnapshotSchema = new mongoose.Schema({
   }
 }, { _id: false });
 
-
+const documentSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: [
+      "COSTING",
+      "AGREEMENT",
+      "INVOICE",
+      "FIGMA",
+      "GITHUB",
+      "DRIVE",
+      "OTHER"
+    ],
+    required: true
+  },
+  title: {
+    type: String,
+    trim: true
+  },
+  link: {
+    type: String,
+    required: true
+  },
+  addedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  addedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, { _id: false });
 
 const projectSchema = new mongoose.Schema({
   projectName: {
@@ -76,13 +106,6 @@ const projectSchema = new mongoose.Schema({
     default: null
   },
 
-  workDeliveredTill: {
-    type: Number,
-    min: 0,
-    max: 100,
-    default: 0
-  },
-
   closureNotes: {
     type: String,
     trim: true
@@ -91,6 +114,8 @@ const projectSchema = new mongoose.Schema({
   paymentSnapshot: paymentSnapshotSchema,
 
   assignedDevelopers: [developerAssignmentSchema],
+
+  documents: [documentSchema],
 
   projectDescription: {
     type: String,

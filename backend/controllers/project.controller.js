@@ -1,15 +1,13 @@
 import Project from "../models/project.model.js";
 import User from "../models/user.model.js";
 
+// admin 
 export const createProject = async (req, res) => {
   try {
     const { projectName, client, projectType, techStack, startDate, expectedEndDate, projectDescription, deploymentLinks, totalCost, amountPaid } = req.body;
 
     if (!projectName || !client || !projectType || !techStack || !startDate || !totalCost) {
-      return res.status(400).json({
-        success: false,
-        message: "Required fields missing"
-      });
+      return res.status(400).json({ success: false, message: "Missing required fields" });
     }
 
     const project = await Project.create({
@@ -28,12 +26,12 @@ export const createProject = async (req, res) => {
       createdBy: req.user._id
     });
 
-    res.status(201).json({
-      success: true,
-      message: "Project created successfully",
-      project
+    res.status(201).json({ 
+      success: true, 
+      message: "Project created successfully", 
+      project 
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
@@ -132,6 +130,92 @@ export const removeDeveloperFromProject = async (req, res) => {
   }
 };
 
+export const addProjectDocument = async (req, res) => {
+  const { projectId } = req.params;
+  const { type, title, link } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+    if (!project) return res.status(404).json({ success: false, message: "Project not found" });
+
+    project.documents.push({
+      type,
+      title,
+      link,
+      addedBy: req.user._id
+    });
+
+    await project.save();
+    return res.json({ success: true, message: "Document added successfully", documents: project.documents });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}; 
+
+export const updateProjectProgress = async (req, res) => {
+  const { projectId } = req.params;
+  const { status, amountPaid, closureNotes, outcome } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+    if (!project){
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    if (status) project.status = status;
+    if (closureNotes) project.closureNotes = closureNotes;
+    if (outcome) project.outcome = outcome;
+
+    if (amountPaid) {
+      project.paymentSnapshot.amountPaid += amountPaid;
+    }
+
+    await project.save();
+    return res.json({ success: true, project });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const updateDeploymentLinks = async (req, res) => {
+  const { projectId } = req.params;
+  const { deploymentLinks } = req.body;
+
+  if (!Array.isArray(deploymentLinks)) {
+    return res.status(400).json({
+      success: false,
+      message: "deploymentLinks must be an array"
+    });
+  }
+
+  try {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found"
+      });
+    }
+
+    project.deploymentLinks = deploymentLinks;
+
+    await project.save();
+
+    return res.json({
+      success: true,
+      message: "Deployment links updated successfully",
+      deploymentLinks: project.deploymentLinks
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
 export const getAllProjectsAdmin = async (req, res) => {
   try {
     const projects = await Project.find()
@@ -173,6 +257,7 @@ export const getSingleProjectAdmin = async (req, res) => {
   }
 };
 
+// developer
 export const getMyProjects = async (req, res) => {
 
   try {
