@@ -17,15 +17,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        length: {
-            min: 6,
-            max: 12
-        }
+        minlength: 6
     },
     role: {
         type: String,
-        enum: ["DEVELOPER", "ADMIN"],
-        default: "DEVELOPER"
+        enum: [
+            "ADMIN",
+            "BACKEND_DEV_WEB",
+            "FRONTEND_DEV_WEB",
+            "MOBILE_DEV_EXPO",
+            "UI_UX_DESIGNER"
+        ],
+        default: "FRONTEND_DEV_WEB"
     },
     isActive: {
         type: Boolean,
@@ -37,7 +40,7 @@ const userSchema = new mongoose.Schema({
             ref: "Project"
         }
     ]
-}, { timestamps: true })  
+}, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
 export default User;
