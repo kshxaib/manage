@@ -11,7 +11,14 @@ export const createClient = async (req, res) => {
       });
     }
 
-    const client = await Client.create({clientName, businessName, email, phone, whatsapp, country, onboardedDate, createdBy: req.user._id});
+    const client = await Client.create({clientName, 
+      businessName, 
+      email, 
+      phone, 
+      whatsapp, 
+      country, 
+      onboardedDate, 
+      createdBy: req.user._id});
 
     return res.status(201).json({
       success: true,
@@ -47,9 +54,19 @@ export const getAllClients = async (req, res) => {
 
 export const updateClient = async (req, res) => {
   try {
+    const {id} = req.params;
     const client = await Client.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+      id,
+      {
+        clientName: req.body.clientName,
+        businessName: req.body.businessName,
+        email: req.body.email,
+        phone: req.body.phone,
+        whatsapp: req.body.whatsapp,
+        country: req.body.country,
+        onboardedDate: req.body.onboardedDate,
+        updatedBy: req.user._id
+      },
       { new: true }
     );
 

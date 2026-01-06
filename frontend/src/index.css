@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  /* =========================
+     BASE COLORS
+     ========================= */
+
+  /* Pure backgrounds */
+  --color-white: #ffffff;        /* Main app background */
+  --color-black: #000000;        /* Rare use: absolute black (icons, emphasis) */
+
+  /* =========================
+     GRAYS (MOST USED)
+     ========================= */
+
+  --color-gray-50:  #f9fafb;     /* Page background (very light) */
+  --color-gray-100: #f3f4f6;     /* Cards background */
+  --color-gray-200: #e5e7eb;     /* Borders, dividers */
+  --color-gray-300: #d1d5db;     /* Disabled states */
+  --color-gray-400: #9ca3af;     /* Placeholder text */
+  --color-gray-500: #6b7280;     /* Secondary text */
+  --color-gray-600: #4b5563;     /* Body text */
+  --color-gray-700: #374151;     /* Headings */
+  --color-gray-800: #1f2937;     /* Dark sections */
+  --color-gray-900: #111827;     /* Primary text (almost black) */
+
+  /* =========================
+     PRIMARY (ACTION COLOR)
+     ========================= */
+
+  --color-primary: #111827;      /* Main buttons, headers (dark gray) */
+  --color-primary-hover: #000000;
+
+  /* =========================
+     SECONDARY / ACCENT
+     ========================= */
+
+  --color-accent: #2563eb;       /* Links, highlights (blue – professional) */
+  --color-accent-hover: #1d4ed8;
+
+  /* =========================
+     STATUS COLORS
+     ========================= */
+
+  --color-success: #16a34a;      /* Success, completed */
+  --color-warning: #ca8a04;      /* On hold, pending */
+  --color-danger:  #dc2626;      /* Cancelled, destructive actions */
+
+  /* =========================
+     BACKGROUNDS
+     ========================= */
+
+  --color-bg-app: var(--color-gray-50);     /* App background */
+  --color-bg-card: var(--color-white);      /* Card background */
+  --color-bg-muted: var(--color-gray-100);  /* Muted sections */
+
+  /* =========================
+     BORDERS & DIVIDERS
+     ========================= */
+
+  --color-border: var(--color-gray-200);    /* Default borders */
+  --color-border-strong: var(--color-gray-300);
+
+  /* =========================
+     TEXT COLORS
+     ========================= */
+
+  --color-text-primary: var(--color-gray-900);   /* Headings */
+  --color-text-secondary: var(--color-gray-600); /* Body text */
+  --color-text-muted: var(--color-gray-400);     /* Hints, labels */
+
+  /* =========================
+     SHADOW / OVERLAY
+     ========================= */
+
+  --color-overlay: rgba(0, 0, 0, 0.5);       /* Modals backdrop */
+}
