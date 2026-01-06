@@ -4,7 +4,9 @@ import { Toaster } from 'sonner';
 import { useAuthStore } from './stores/useAuthStore';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import Loader from './components/Loader';
 
 function App() {
@@ -29,6 +31,14 @@ function App() {
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -7,7 +7,6 @@ const Unauthorized = ({ message = "You don't have permission to access this page
         <div className="min-h-screen bg-bg-app flex items-center justify-center p-4">
             <div className="max-w-md w-full">
                 <div className="bg-bg-card border border-border rounded-lg shadow-lg p-8 text-center">
-                    {/* 403 Icon */}
                     <div className="mb-6">
                         <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-danger/10 mb-4">
                             <svg

@@ -16,7 +16,7 @@ export const createProject = async (req, res) => {
       projectType,
       techStack,
       startDate,
-      expectedEndDate,
+      expectedEndDate: expectedEndDate || null,
       projectDescription,
       deploymentLinks,
       paymentSnapshot: {
@@ -32,7 +32,11 @@ export const createProject = async (req, res) => {
       project
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error("Project Creation Error:", err);
+    res.status(500).json({
+      success: false,
+      message: err.message || "Internal server error"
+    });
   }
 };
 
@@ -54,7 +58,7 @@ export const addDeveloperToProject = async (req, res) => {
     }
 
     if (project.isLocked) {
-      return res.status(403).json({ message: "Project is locked" });
+      return res.status(403).json({ success: false, message: "Project is locked" });
     }
 
     const developer = await User.findById(developerId);
@@ -86,10 +90,12 @@ export const addDeveloperToProject = async (req, res) => {
     developer.projects.push(project._id);
     await developer.save();
 
+    const populatedProject = await Project.findById(projectId).populate("assignedDevelopers.developer", "name email");
+
     res.status(200).json({
       success: true,
       message: `${developer.name} added to project successfully`,
-      project
+      project: populatedProject
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -106,7 +112,7 @@ export const removeDeveloperFromProject = async (req, res) => {
     }
 
     if (project.isLocked) {
-      return res.status(403).json({ message: "Project is locked" });
+      return res.status(403).json({ success: false, message: "Project is locked" });
     }
 
     const beforeCount = project.assignedDevelopers.length;
@@ -128,10 +134,12 @@ export const removeDeveloperFromProject = async (req, res) => {
       $pull: { projects: project._id }
     });
 
+    const populatedProject = await Project.findById(projectId).populate("assignedDevelopers.developer", "name email");
+
     res.status(200).json({
       success: true,
-      message: `${developer.name} removed from project successfully`,
-      project
+      message: "Developer removed from project successfully",
+      project: populatedProject
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -285,6 +293,32 @@ export const updateProjectHosting = async (req, res) => {
   }
 };
 
+export const updateProjectInfo = async (req, res) => {
+  const { projectId } = req.params;
+  const { projectName, projectType, techStack, startDate, expectedEndDate, projectDescription } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+    if (!project) return res.status(404).json({ success: false, message: "Project not found" });
+
+    if (project.isLocked) {
+      return res.status(403).json({ success: false, message: "Project is locked" });
+    }
+
+    if (projectName) project.projectName = projectName;
+    if (projectType) project.projectType = projectType;
+    if (techStack) project.techStack = techStack;
+    if (startDate) project.startDate = startDate;
+    if (expectedEndDate !== undefined) project.expectedEndDate = expectedEndDate;
+    if (projectDescription !== undefined) project.projectDescription = projectDescription;
+
+    await project.save();
+    return res.json({ success: true, message: "Project information updated successfully", project });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 export const toggleProjectLock = async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -312,7 +346,8 @@ export const getAllProjectsAdmin = async (req, res) => {
   try {
     const projects = await Project.find()
       .populate("client", "businessName")
-      .populate("assignedDevelopers.developer", "name email phone");
+      .populate("assignedDevelopers.developer", "name email phone")
+      .sort({ createdAt: -1 });
 
     res.json({ success: true, projects });
   } catch (error) {

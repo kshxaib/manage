@@ -83,7 +83,7 @@ const projectSchema = new mongoose.Schema({
   },
 
   techStack: {
-    type: String, 
+    type: String,
     required: true
   },
 
@@ -123,22 +123,22 @@ const projectSchema = new mongoose.Schema({
   },
 
   deploymentLinks: {
-    type: [String] 
+    type: [String]
   },
 
   hosting: {
-  backendHosting: {
-    type: String,
-    trim: true
-  },
-  database: {
-    type: String, 
-    trim: true
-  },
-  domainName: {
-    type: String, 
-    trim: true
-  }
+    backendHosting: {
+      type: String,
+      trim: true
+    },
+    database: {
+      type: String,
+      trim: true
+    },
+    domainName: {
+      type: String,
+      trim: true
+    }
   },
 
   isLocked: {
@@ -153,12 +153,11 @@ const projectSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-projectSchema.pre("save", function (next) {
+projectSchema.pre("save", async function () {
   if (this.paymentSnapshot) {
     this.paymentSnapshot.pendingAmount =
       this.paymentSnapshot.totalCost - this.paymentSnapshot.amountPaid;
   }
-  next();
 });
 
 const Project = mongoose.model("Project", projectSchema);

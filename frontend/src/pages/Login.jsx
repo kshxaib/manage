@@ -8,7 +8,7 @@ const Login = () => {
     const { login, isLoggingIn, user } = useAuthStore();
 
     if (user) {
-        return <Navigate to="/dashboard" replace />;
+        return <Navigate to={user.role === 'ADMIN' ? '/admin' : '/dashboard'} replace />;
     }
 
     const handleSubmit = async (e) => {
