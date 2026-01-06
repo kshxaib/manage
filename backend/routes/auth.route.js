@@ -1,11 +1,12 @@
 import express from "express";
-import { createUser, getAllUsers, login, logout, toggleDeveloperStatus } from "../controllers/auth.controller.js";
+import { createUser, getAllUsers, login, logout, toggleDeveloperStatus, getMe } from "../controllers/auth.controller.js";
 import { isAuthenticated, isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
 router.post("/login", login);
 router.post("/logout", isAuthenticated, logout);
+router.get("/me", isAuthenticated, getMe);
 
 // Admin Routes
 router.post("/register", isAuthenticated, isAdmin, createUser);
