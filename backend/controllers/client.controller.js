@@ -37,7 +37,7 @@ export const getAllClients = async (req, res) => {
   try {
     const clients = await Client.find()
       .populate("createdBy", "name email")
-      .sort({ onboardedDate: -1 });
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,

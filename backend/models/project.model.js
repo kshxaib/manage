@@ -96,14 +96,8 @@ const projectSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["PLANNING", "DEVELOPMENT", "REVIEW", "LIVE", "ON_HOLD"],
+    enum: ["PLANNING", "DEVELOPMENT", "REVIEW", "LIVE", "ON_HOLD", "CANCELLED"],
     default: "PLANNING"
-  },
-
-  outcome: {
-    type: String,
-    enum: ["COMPLETED", "CANCELLED_BY_CLIENT"],
-    default: null
   },
 
   closureNotes: {

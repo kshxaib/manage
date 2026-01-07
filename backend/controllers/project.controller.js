@@ -26,10 +26,13 @@ export const createProject = async (req, res) => {
       createdBy: req.user._id
     });
 
+    const populatedProject = await Project.findById(project._id)
+      .populate("client", "clientName businessName");
+
     res.status(201).json({
       success: true,
       message: "Project created successfully",
-      project
+      project: populatedProject
     });
   } catch (err) {
     console.error("Project Creation Error:", err);
@@ -70,7 +73,10 @@ export const addDeveloperToProject = async (req, res) => {
     }
 
     const alreadyAssigned = project.assignedDevelopers.some(
-      (d) => d.developer.toString() === developerId
+      (d) => {
+        const id = d.developer._id ? d.developer._id : d.developer;
+        return id.toString() === developerId;
+      }
     );
 
     if (alreadyAssigned) {
@@ -90,7 +96,9 @@ export const addDeveloperToProject = async (req, res) => {
     developer.projects.push(project._id);
     await developer.save();
 
-    const populatedProject = await Project.findById(projectId).populate("assignedDevelopers.developer", "name email");
+    const populatedProject = await Project.findById(projectId)
+      .populate("client", "clientName businessName")
+      .populate("assignedDevelopers.developer", "name email");
 
     res.status(200).json({
       success: true,
@@ -98,7 +106,8 @@ export const addDeveloperToProject = async (req, res) => {
       project: populatedProject
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error("Error in addDeveloperToProject:", error);
+    res.status(500).json({ success: false, message: error.message || "Internal server error" });
   }
 };
 
@@ -134,7 +143,9 @@ export const removeDeveloperFromProject = async (req, res) => {
       $pull: { projects: project._id }
     });
 
-    const populatedProject = await Project.findById(projectId).populate("assignedDevelopers.developer", "name email");
+    const populatedProject = await Project.findById(projectId)
+      .populate("client", "clientName businessName")
+      .populate("assignedDevelopers.developer", "name email");
 
     res.status(200).json({
       success: true,
@@ -172,30 +183,58 @@ export const addProjectDocument = async (req, res) => {
   }
 };
 
-export const updateProjectProgress = async (req, res) => {
+export const recordPayment = async (req, res) => {
   const { projectId } = req.params;
-  const { status, amountPaid, closureNotes, outcome } = req.body;
+  const { amountPaid } = req.body;
 
   try {
     const project = await Project.findById(projectId);
-    if (!project) {
-      return res.status(404).json({ success: false, message: "Project not found" });
-    }
+    if (!project) return res.status(404).json({ success: false, message: "Project not found" });
 
     if (project.isLocked) {
-      return res.status(403).json({ message: "Project is locked" });
+      return res.status(403).json({ message: "Project is locked. Cannot record payments." });
     }
 
-    if (status) project.status = status;
-    if (closureNotes) project.closureNotes = closureNotes;
-    if (outcome) project.outcome = outcome;
-
     if (amountPaid) {
+      const remainingBalance = project.paymentSnapshot.totalCost - project.paymentSnapshot.amountPaid;
+      if (amountPaid > remainingBalance) {
+        return res.status(400).json({
+          success: false,
+          message: `Amount exceeds the outstanding balance (₹${remainingBalance.toLocaleString()})`
+        });
+      }
       project.paymentSnapshot.amountPaid += amountPaid;
     }
 
     await project.save();
-    return res.json({ success: true, project });
+
+    const populatedProject = await Project.findById(projectId)
+      .populate("client", "clientName businessName")
+      .populate("assignedDevelopers.developer", "name email phone");
+
+    return res.json({ success: true, message: "Payment recorded", project: populatedProject });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const updateClosureNotes = async (req, res) => {
+  const { projectId } = req.params;
+  const { closureNotes } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+    if (!project) return res.status(404).json({ success: false, message: "Project not found" });
+
+    if (closureNotes) project.closureNotes = closureNotes;
+
+    await project.save();
+
+    const populatedProject = await Project.findById(projectId)
+      .populate("client", "clientName businessName")
+      .populate("assignedDevelopers.developer", "name email phone");
+
+    return res.json({ success: true, message: "Closure notes updated", project: populatedProject });
   } catch (err) {
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -295,7 +334,7 @@ export const updateProjectHosting = async (req, res) => {
 
 export const updateProjectInfo = async (req, res) => {
   const { projectId } = req.params;
-  const { projectName, projectType, techStack, startDate, expectedEndDate, projectDescription } = req.body;
+  const { projectName, projectType, status, techStack, startDate, expectedEndDate, projectDescription } = req.body;
 
   try {
     const project = await Project.findById(projectId);
@@ -307,13 +346,19 @@ export const updateProjectInfo = async (req, res) => {
 
     if (projectName) project.projectName = projectName;
     if (projectType) project.projectType = projectType;
+    if (status) project.status = status;
     if (techStack) project.techStack = techStack;
     if (startDate) project.startDate = startDate;
     if (expectedEndDate !== undefined) project.expectedEndDate = expectedEndDate;
     if (projectDescription !== undefined) project.projectDescription = projectDescription;
 
     await project.save();
-    return res.json({ success: true, message: "Project information updated successfully", project });
+
+    const populatedProject = await Project.findById(projectId)
+      .populate("client", "clientName businessName")
+      .populate("assignedDevelopers.developer", "name email phone");
+
+    return res.json({ success: true, message: "Project information updated successfully", project: populatedProject });
   } catch (err) {
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -345,7 +390,7 @@ export const toggleProjectLock = async (req, res) => {
 export const getAllProjectsAdmin = async (req, res) => {
   try {
     const projects = await Project.find()
-      .populate("client", "businessName")
+      .populate("client", "clientName businessName")
       .populate("assignedDevelopers.developer", "name email phone")
       .sort({ createdAt: -1 });
 
@@ -371,7 +416,7 @@ export const getSingleProjectAdmin = async (req, res) => {
   const { projectId } = req.params;
   try {
     const project = await Project.findById(projectId)
-      .populate("client", "businessName")
+      .populate("client", "clientName businessName")
       .populate("assignedDevelopers.developer", "name email phone");
 
     if (!project) {
@@ -392,7 +437,7 @@ export const getMyProjects = async (req, res) => {
       "assignedDevelopers.developer": req.user._id
     })
       .select("-paymentSnapshot -closureNotes")
-      .populate("client", "businessName")
+      .populate("client", "clientName businessName")
       .populate("assignedDevelopers.developer", "name phone");
 
     res.json({ success: true, projects });
@@ -409,7 +454,7 @@ export const getSingleProjectDeveloper = async (req, res) => {
       "assignedDevelopers.developer": req.user._id
     })
       .select("-paymentSnapshot -closureNotes")
-      .populate("client", "businessName")
+      .populate("client", "clientName businessName")
       .populate("assignedDevelopers.developer", "name phone");
 
     if (!project) {

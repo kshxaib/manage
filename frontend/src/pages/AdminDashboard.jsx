@@ -62,6 +62,7 @@ const AdminDashboard = () => {
                 return (
                     <AllClients
                         clients={clients}
+                        isLoading={clientsLoading}
                         onNavigate={handleNavigation}
                         onAddClient={() => setIsAddClientModalOpen(true)}
                     />
@@ -70,12 +71,13 @@ const AdminDashboard = () => {
                 return (
                     <AllProjects
                         projects={projects}
+                        isLoading={projectsLoading}
                         onNavigate={handleNavigation}
                         onAddProject={() => setIsCreateProjectModalOpen(true)}
                     />
                 );
             case 'all-developers':
-                return <AllDevelopers developers={developers} />;
+                return <AllDevelopers developers={developers} isLoading={developersLoading} />;
             case 'client-personal-info':
                 return (
                     <ClientInfo

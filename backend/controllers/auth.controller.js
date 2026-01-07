@@ -55,7 +55,7 @@ export const login = async (req, res) => {
       success: true,
       message: "Login successful",
       user: {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -121,7 +121,7 @@ export const createUser = async (req, res) => {
       success: true,
       message: "User created successfully",
       user: {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,

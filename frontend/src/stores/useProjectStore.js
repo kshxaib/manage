@@ -157,17 +157,34 @@ export const useProjectStore = create((set, get) => ({
         }
     },
 
-    updateProjectProgress: async (projectId, progressData) => {
+    recordPayment: async (projectId, amountPaid) => {
         set({ isLoading: true });
         try {
-            const { data } = await axiosInstance.patch(`/projects/${projectId}/progress`, progressData);
+            const { data } = await axiosInstance.patch(`/projects/${projectId}/payment`, { amountPaid });
             set(state => ({
                 projects: state.projects.map(p => p._id === projectId ? data.project : p)
             }));
-            toast.success('Progress updated');
+            toast.success(data.message || 'Payment recorded');
             return true;
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to update progress');
+            toast.error(error.response?.data?.message || 'Failed to record payment');
+            return false;
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
+    updateClosureNotes: async (projectId, closureNotes) => {
+        set({ isLoading: true });
+        try {
+            const { data } = await axiosInstance.patch(`/projects/${projectId}/closure-notes`, { closureNotes });
+            set(state => ({
+                projects: state.projects.map(p => p._id === projectId ? data.project : p)
+            }));
+            toast.success(data.message || 'Closure notes updated');
+            return true;
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to update closure notes');
             return false;
         } finally {
             set({ isLoading: false });

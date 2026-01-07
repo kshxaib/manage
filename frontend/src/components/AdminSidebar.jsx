@@ -15,7 +15,8 @@ const AdminSidebar = ({ onNavigate, activeView }) => {
             <div className="p-4 space-y-1">
                 {navItems.map((item) => {
                     const isActive = activeView === item.id ||
-                        (item.id === 'all-clients' && (activeView === 'client-personal-info' || activeView === 'client-projects-list'));
+                        (item.id === 'all-clients' && (activeView === 'client-personal-info' || activeView === 'client-projects-list')) ||
+                        (item.id === 'all-projects' && activeView === 'project-overview');
 
                     return (
                         <button

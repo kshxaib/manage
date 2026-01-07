@@ -1,5 +1,6 @@
 import express from "express";
-import { createProject, getAllProjectsAdmin, getProjectsByClient, getSingleProjectAdmin, getMyProjects, getSingleProjectDeveloper, addDeveloperToProject, removeDeveloperFromProject, updateDeploymentLinks, addProjectDocument, updateProjectProgress, toggleProjectLock, updateProjectHosting, updateProjectInfo } from "../controllers/project.controller.js";
+
+import { createProject, getAllProjectsAdmin, getProjectsByClient, getSingleProjectAdmin, getMyProjects, getSingleProjectDeveloper, addDeveloperToProject, removeDeveloperFromProject, updateDeploymentLinks, addProjectDocument, recordPayment, updateClosureNotes, toggleProjectLock, updateProjectHosting, updateProjectInfo } from "../controllers/project.controller.js";
 import { isAuthenticated, isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -15,7 +16,8 @@ router.post("/:projectId/developers", isAuthenticated, isAdmin, addDeveloperToPr
 router.delete("/:projectId/developers/:developerId", isAuthenticated, isAdmin, removeDeveloperFromProject);
 
 router.post("/:projectId/documents", isAuthenticated, isAdmin, addProjectDocument);
-router.patch("/:projectId/progress", isAuthenticated, isAdmin, updateProjectProgress);
+router.patch("/:projectId/payment", isAuthenticated, isAdmin, recordPayment);
+router.patch("/:projectId/closure-notes", isAuthenticated, isAdmin, updateClosureNotes);
 
 router.patch("/:projectId/deployment-links", isAuthenticated, isAdmin, updateDeploymentLinks);
 router.patch("/:projectId/toggle-lock", isAuthenticated, isAdmin, toggleProjectLock);
