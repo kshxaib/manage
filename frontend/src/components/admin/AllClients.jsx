@@ -152,7 +152,6 @@ const AllClients = ({ clients, onNavigate, onAddClient, isLoading }) => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="text-sm text-gray-700 font-medium">{formatDate(client.onboardedDate)}</div>
-                                        <div className="text-xs text-gray-400">Member since</div>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <button

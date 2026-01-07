@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/useAuthStore';
 import { useProjectStore } from '../stores/useProjectStore';
-import { useDeveloperStore } from '../stores/useDeveloperStore';
 import DeveloperProjects from '../components/DeveloperProjects';
 import ProjectOverview from '../components/admin/ProjectOverview';
-import Loader from '../components/Loader';
 import Skeleton from '../components/ui/Skeleton';
 
 const Dashboard = () => {
     const { user, logout } = useAuthStore();
     const { projects, fetchMyProjects, isLoading } = useProjectStore();
-    const { fetchDevelopers } = useDeveloperStore();
-    const [activeView, setActiveView] = useState('projects'); // 'projects' or 'project-overview' or 'profile'
+    const [activeView, setActiveView] = useState('projects'); 
     const [selectedProjectId, setSelectedProjectId] = useState(null);
 
     useEffect(() => {
@@ -28,28 +25,24 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-bg-app font-sans selection:bg-primary/20">
-            {/* Glossy Header */}
-            <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-border/50">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 rotate-3 group hover:rotate-0 transition-transform">
-                            <span className="text-white font-black text-xl">M</span>
-                        </div>
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
                         <div>
-                            <h1 className="text-lg font-black text-text-primary tracking-tighter uppercase">By4K's Manage</h1>
-                            <p className="text-[10px] text-text-muted font-black uppercase tracking-widest">Developer Hub</p>
+                            <h1 className="text-base font-semibold text-gray-900">Developer Dashboard</h1>
+                            <p className="text-xs text-gray-500">Project Management</p>
                         </div>
                     </div>
 
-                    <div className="flex items-center space-x-6">
-                        <div className="hidden md:flex items-center space-x-1 px-4 py-2 bg-bg-muted/50 rounded-xl border border-border/50">
-                            <div className="w-2 h-2 bg-achievement rounded-full animate-pulse"></div>
-                            <span className="text-[10px] font-black text-text-secondary uppercase tracking-widest">{user?.name}</span>
+                    <div className="flex items-center gap-4">
+                        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
+                            <span className="text-xs font-medium text-gray-700">{user?.name}</span>
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="px-6 py-2.5 text-[10px] font-black text-white bg-danger hover:bg-black rounded-xl uppercase tracking-widest transition-all shadow-lg shadow-danger/20"
+                            className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-sm"
                         >
                             Logout
                         </button>
@@ -57,31 +50,30 @@ const Dashboard = () => {
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-6 py-12">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {activeView === 'projects' && (
-                    <div className="space-y-8">
+                    <div className="space-y-6">
                         {/* Welcome Card */}
-                        <div className="relative overflow-hidden bg-bg-card border border-border rounded-[40px] p-10 shadow-sm group">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-primary/10 transition-colors"></div>
-                            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                        <div className="bg-white border border-gray-200 rounded-xl p-6">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                                 <div>
-                                    <h2 className="text-4xl font-black text-text-primary mb-3 tracking-tighter uppercase italic">
-                                        Welcome, {user?.name?.split(' ')[0]}! 👋
-                                    </h2>
-                                    <p className="text-text-secondary font-medium text-lg leading-relaxed max-w-xl">
-                                        Your dev workspace is ready. You currently have <span className="text-primary font-black underline decoration-primary/30 decoration-4 underline-offset-4">
-                                            {isLoading && projects.length === 0 ? <Skeleton className="inline-block h-6 w-24 align-middle" /> : `${projects.length} assignments`}
-                                        </span> active.
+                                    <h2 className="text-xl font-semibold text-gray-900 mb-2">Welcome, {user?.name?.split(' ')[0]}!</h2>
+                                    <p className="text-gray-600">
+                                        You have <span className="font-semibold text-blue-600">
+                                            {isLoading && projects.length === 0 ? (
+                                                <Skeleton className="inline-block h-4 w-20 align-middle" />
+                                            ) : (
+                                                `${projects.length} active project${projects.length !== 1 ? 's' : ''}`
+                                            )}
+                                        </span> assigned to you.
                                     </p>
                                 </div>
-                                <div className="flex space-x-3">
-                                    <button
-                                        onClick={() => setActiveView('profile')}
-                                        className="px-8 py-4 bg-bg-muted border border-border rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-border transition-all"
-                                    >
-                                        View Profile
-                                    </button>
-                                </div>
+                                <button
+                                    onClick={() => setActiveView('profile')}
+                                    className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all"
+                                >
+                                    View Profile
+                                </button>
                             </div>
                         </div>
 
@@ -103,26 +95,35 @@ const Dashboard = () => {
 
                 {activeView === 'profile' && (
                     <div className="max-w-2xl mx-auto space-y-6">
-                        <div className="flex items-center space-x-2 text-[10px] text-text-muted mb-6 cursor-pointer hover:text-text-primary uppercase tracking-widest font-black transition-colors" onClick={() => setActiveView('projects')}>
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
-                            <span>Back to Projects</span>
+                        <div className="mb-6">
+                            <button 
+                                onClick={() => setActiveView('projects')}
+                                className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors group"
+                            >
+                                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                Back to Projects
+                            </button>
                         </div>
 
-                        <div className="bg-bg-card border border-border rounded-[40px] p-12 shadow-sm text-center">
-                            <div className="w-24 h-24 bg-primary/10 rounded-[32px] flex items-center justify-center mx-auto mb-8 border-2 border-primary/20">
-                                <span className="text-4xl text-primary font-black">{user?.name?.charAt(0)}</span>
+                        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                                <span className="text-2xl font-semibold text-blue-700">{user?.name?.charAt(0)}</span>
                             </div>
-                            <h3 className="text-2xl font-black text-text-primary uppercase tracking-tight mb-2">{user?.name}</h3>
-                            <p className="text-text-muted font-black uppercase tracking-widest text-[10px] mb-10">{user?.role} • {user?.isActive ? 'ACTIVE ACCOUNT' : 'INACTIVE'}</p>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-1">{user?.name}</h3>
+                            <p className="text-sm text-gray-500 mb-8">
+                                {user?.role} • {user?.isActive ? 'Active Account' : 'Inactive'}
+                            </p>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-6 bg-bg-muted/50 rounded-3xl border border-border">
-                                    <p className="text-[10px] text-text-muted font-black uppercase tracking-widest mb-2">Email Address</p>
-                                    <p className="font-bold text-text-primary truncate">{user?.email}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <p className="text-xs font-medium text-gray-500 mb-2">Email Address</p>
+                                    <p className="font-medium text-gray-900 truncate">{user?.email}</p>
                                 </div>
-                                <div className="p-6 bg-bg-muted/50 rounded-3xl border border-border">
-                                    <p className="text-[10px] text-text-muted font-black uppercase tracking-widest mb-2">Projects Joined</p>
-                                    <p className="font-bold text-text-primary">{projects.length}</p>
+                                <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <p className="text-xs font-medium text-gray-500 mb-2">Projects Assigned</p>
+                                    <p className="font-medium text-gray-900">{projects.length}</p>
                                 </div>
                             </div>
                         </div>
@@ -134,4 +135,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

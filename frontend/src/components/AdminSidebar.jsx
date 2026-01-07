@@ -1,15 +1,15 @@
 const AdminSidebar = ({ onNavigate, activeView }) => {
     const navItems = [
         { id: 'dashboard', label: 'Dashboard' },
-        { id: 'all-clients', label: 'All Clients' },
-        { id: 'all-projects', label: 'All Projects' },
-        { id: 'all-developers', label: 'All Developers' },
+        { id: 'all-clients', label: 'Clients' },
+        { id: 'all-projects', label: 'Projects' },
+        { id: 'all-developers', label: 'Team' },
     ];
 
     return (
-        <div className="w-64 bg-bg-card border-r border-border h-screen">
-            <div className="p-4 border-b border-border">
-                <h2 className="text-lg font-bold text-text-primary">Navigation</h2>
+        <div className="w-64 bg-white border-r border-gray-200 h-screen">
+            <div className="p-7 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Navigation</h2>
             </div>
 
             <div className="p-4 space-y-1">
@@ -22,10 +22,10 @@ const AdminSidebar = ({ onNavigate, activeView }) => {
                         <button
                             key={item.id}
                             onClick={() => onNavigate(item.id)}
-                            className={`w-full text-left px-4 py-2.5 rounded-lg font-medium
+                            className={`w-full text-left px-4 py-3 rounded-lg font-medium
                                     transition-colors duration-200 ${isActive
-                                    ? 'bg-primary text-white'
-                                    : 'text-text-primary hover:bg-bg-muted'
+                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                                    : 'text-gray-700 hover:bg-gray-50 hover:text-blue-700'
                                 }`}
                         >
                             {item.label}
