@@ -1,147 +1,86 @@
 @import "tailwindcss";
 
-/* ======================================================
-   DESIGN SYSTEM — INTERNAL AGENCY ERP
-   Base: White / Black (Professional)
-   Layer: Subtle Gamification (Motivation, not distraction)
-   ====================================================== */
+/* @theme {
+   --color-white: #ffffff;
+   --color-black: #000000;
 
-@theme {
-  /* ======================================================
-     BASE COLORS
-     ====================================================== */
+   --color-gray-50: #fafafa;
+   --color-gray-100: #f5f5f5;
+   --color-gray-200: #e5e5e5;
+   --color-gray-300: #d4d4d4;
+   --color-gray-400: #a3a3a3;
+   --color-gray-500: #737373;
+   --color-gray-600: #525252;
+   --color-gray-700: #404040;
+   --color-gray-800: #262626;
+   --color-gray-900: #171717;
+   --color-gray-950: #0a0a0a;
 
-  --color-white: #ffffff;        /* Main card / surface */
-  --color-black: #000000;        /* Rare use (icons, emphasis only) */
+   --color-primary: #000000;
+   --color-primary-hover: #262626;
 
-  /* ======================================================
-     GRAYS (MOST USED — CORE UI)
-     ====================================================== */
+   --color-accent: #000000;
+   --color-accent-hover: #404040;
 
-  --color-gray-50:  #f9fafb;     /* App background */
-  --color-gray-100: #f3f4f6;     /* Card background */
-  --color-gray-200: #e5e7eb;     /* Borders, dividers */
-  --color-gray-300: #d1d5db;     /* Disabled states */
-  --color-gray-400: #9ca3af;     /* Placeholder / hints */
-  --color-gray-500: #6b7280;     /* Secondary text */
-  --color-gray-600: #4b5563;     /* Body text */
-  --color-gray-700: #374151;     /* Section headings */
-  --color-gray-800: #1f2937;     /* Dark sections */
-  --color-gray-900: #111827;     /* Primary text */
+   --color-success: #171717;
+   --color-warning: #525252;
+   --color-danger: #000000;
 
-  /* ======================================================
-     PRIMARY ACTION COLOR
-     ====================================================== */
+   --color-border: var(--color-gray-200);
+   --color-border-strong: var(--color-gray-900);
 
-  --color-primary: #111827;      /* Main buttons, headers */
-  --color-primary-hover: #000000;
+   --color-text-primary: #000000;
+   --color-text-secondary: #525252;
+   --color-text-muted: #a3a3a3;
+   --color-text-inverted: #ffffff;
 
-  /* ======================================================
-     ACCENT (LINKS / HIGHLIGHTS)
-     ====================================================== */
+   --color-overlay: rgba(0, 0, 0, 0.4);
 
-  --color-accent: #2563eb;       /* Links, highlights */
-  --color-accent-hover: #1d4ed8;
+   --color-xp: #000000;
+   --color-xp-muted: #f5f5f5;
 
-  /* ======================================================
-     STATUS COLORS
-     ====================================================== */
+   --color-streak: #404040;
+   --color-streak-muted: #e5e5e5;
 
-  --color-success: #16a34a;      /* Completed / success */
-  --color-warning: #ca8a04;      /* On hold / pending */
-  --color-danger:  #dc2626;      /* Cancelled / destructive */
+   --color-achievement: #171717;
+   --color-achievement-muted: #fafafa;
 
-  /* ======================================================
-     BACKGROUNDS
-     ====================================================== */
+   --color-reward: #262626;
+   --color-reward-muted: #f5f5f5;
 
-  --color-bg-app: var(--color-gray-50);     /* Full page */
-  --color-bg-card: var(--color-white);      /* Cards */
-  --color-bg-muted: var(--color-gray-100);  /* Muted sections */
+   --color-focus: #525252;
+   --color-focus-muted: #e5e5e5;
 
-  /* ======================================================
-     BORDERS
-     ====================================================== */
+   --gradient-xp: linear-gradient(to right, #000000, #404040);
+   --gradient-streak: linear-gradient(to right, #262626, #525252);
+   --gradient-achievement: linear-gradient(to right, #171717, #525252);
 
-  --color-border: var(--color-gray-200);
-  --color-border-strong: var(--color-gray-300);
+   --color-border-xp: #000000;
+   --color-border-streak: #404040;
+   --color-border-achievement: #171717;
 
-  /* ======================================================
-     TEXT COLORS
-     ====================================================== */
+   --color-bg-app: #f5f5f5;
+   --color-bg-card: #ffffff;
+   --color-bg-muted: #fafafa;
+} 
 
-  --color-text-primary: var(--color-gray-900);   /* Headings */
-  --color-text-secondary: var(--color-gray-600); /* Paragraphs */
-  --color-text-muted: var(--color-gray-400);     /* Metadata */
-
-  /* ======================================================
-     OVERLAY / MODAL
-     ====================================================== */
-
-  --color-overlay: rgba(0, 0, 0, 0.5);
-
-  /* ======================================================
-     GAMIFICATION LAYER (SUBTLE)
-     ====================================================== */
-
-  /* Progress / XP */
-  --color-xp: #22c55e;
-  --color-xp-muted: #dcfce7;
-
-  /* Streaks */
-  --color-streak: #f97316;
-  --color-streak-muted: #ffedd5;
-
-  /* Achievements */
-  --color-achievement: #a855f7;
-  --color-achievement-muted: #f3e8ff;
-
-  /* Rewards / Unlocks */
-  --color-reward: #14b8a6;
-  --color-reward-muted: #ccfbf1;
-
-  /* Attention / Focus */
-  --color-focus: #eab308;
-  --color-focus-muted: #fef9c3;
-
-  /* ======================================================
-     GAMIFICATION GRADIENTS (SMALL AREAS ONLY)
-     ====================================================== */
-
-  --gradient-xp: linear-gradient(to right, #22c55e, #4ade80);
-  --gradient-streak: linear-gradient(to right, #f97316, #fb923c);
-  --gradient-achievement: linear-gradient(to right, #a855f7, #c084fc);
-
-  /* ======================================================
-     GAMIFICATION BORDERS
-     ====================================================== */
-
-  --color-border-xp: #86efac;
-  --color-border-streak: #fdba74;
-  --color-border-achievement: #d8b4fe;
-}
-
-/* ======================================================
-   GLOBAL BASE STYLES (OPTIONAL BUT RECOMMENDED)
-   ====================================================== */
 
 html,
 body,
 #root {
-  height: 100%;
-  background-color: var(--color-bg-app);
-  color: var(--color-text-secondary);
+   height: 100%;
+   background-color: var(--color-bg-app);
+   color: var(--color-text-secondary);
 }
 
-/* Smooth text */
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Disable ugly number input arrows (admin forms) */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+   -webkit-appearance: none;
+   margin: 0;
 }
+*/

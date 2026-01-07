@@ -35,110 +35,170 @@ const AllDevelopers = ({ developers, isLoading }) => {
     const roles = ["FRONTEND", "BACKEND", "FULLSTACK", "MOBILE", "DESIGNER"];
 
     return (
-        <div className="bg-bg-card border border-border rounded-[32px] shadow-sm p-8 md:p-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden animate-in fade-in duration-300">
+            {/* Header */}
+            <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-gray-50 to-white">
                 <div>
-                    <h2 className="text-3xl font-black text-text-primary uppercase tracking-tighter italic">Human Capital</h2>
-                    <p className="text-[10px] text-text-muted font-black uppercase tracking-widest mt-1">
-                        {debouncedSearchQuery || roleFilter ? 'Filtered team results' : `Total: ${developers?.length || 0} members in your production team`}
-                    </p>
+                    <h2 className="text-2xl font-bold text-gray-900">Team Members</h2>
+                    <p className="text-sm text-gray-500 mt-1">Manage your development team members</p>
                 </div>
                 <button
                     onClick={() => setIsAddModalOpen(true)}
-                    className="px-8 py-4 bg-accent text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-black transition-all shadow-xl shadow-accent/20 flex items-center space-x-3"
+                    className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2"
                 >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    <span>Onboard Member</span>
+                    Add Team Member
                 </button>
             </div>
 
             {/* Filter Bar */}
-            <div className="mb-10 flex flex-col md:flex-row gap-4 items-center">
+            <div className="px-6 py-4 bg-gray-50/80 border-b border-gray-200 flex flex-col md:flex-row gap-3 items-center">
                 <div className="relative flex-1 w-full">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
                     <input
                         type="text"
-                        placeholder="Search by name or email..."
-                        className="w-full px-6 py-4 bg-bg-muted border border-border rounded-2xl text-sm font-bold focus:ring-4 focus:ring-accent/10 focus:border-accent outline-none transition-all placeholder:text-text-muted/50"
+                        placeholder="Search team members by name or email..."
+                        className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-500"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <div className="w-full md:w-64">
-                    <select
-                        className="w-full px-6 py-4 bg-bg-muted border border-border rounded-2xl text-sm font-bold focus:ring-4 focus:ring-accent/10 focus:border-accent outline-none transition-all cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22M6%208l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.5rem_center] bg-no-repeat"
-                        value={roleFilter}
-                        onChange={(e) => setRoleFilter(e.target.value)}
-                    >
-                        <option value="">All Roles</option>
-                        {roles.map(role => (
-                            <option key={role} value={role}>{role}</option>
-                        ))}
-                    </select>
+                <div className="w-full md:w-48">
+                    <div className="relative">
+                        <select
+                            className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all cursor-pointer appearance-none pr-10"
+                            value={roleFilter}
+                            onChange={(e) => setRoleFilter(e.target.value)}
+                        >
+                            <option value="" className="text-gray-500">All Roles</option>
+                            {roles.map(role => (
+                                <option key={role} value={role} className="text-gray-900">{role}</option>
+                            ))}
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                {isLoading ? (
-                    Array(6).fill(0).map((_, i) => (
-                        <div key={i} className="p-6 border border-border rounded-[24px] bg-bg-card flex items-center space-x-6">
-                            <Skeleton className="w-16 h-16 rounded-[20px] shrink-0" />
-                            <div className="flex-1 space-y-2">
-                                <Skeleton className="h-5 w-32" />
-                                <Skeleton className="h-3 w-48" />
-                            </div>
-                        </div>
-                    ))
-                ) : filteredDevelopers.length > 0 ? (
-                    filteredDevelopers.map((dev) => (
-                        <div key={dev._id} className="group p-6 border border-border rounded-[24px] bg-bg-card hover:border-accent hover:shadow-2xl hover:shadow-accent/5 transition-all flex items-center space-x-6 relative overflow-hidden">
-
-                            <div className="relative shrink-0">
-                                <div className="w-16 h-16 rounded-[20px] bg-bg-muted flex items-center justify-center text-accent font-black text-2xl border-2 border-border group-hover:border-accent/30 transition-colors">
-                                    {dev.name[0]}
-                                </div>
-                                <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-4 border-bg-card ${dev.isActive ? 'bg-achievement' : 'bg-danger'}`}></div>
-                            </div>
-
-                            <div className="flex-1 min-w-0 pr-4">
-                                <h3 className="font-black text-text-primary uppercase tracking-tight text-lg truncate">{dev.name}</h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                    <span className="text-[9px] text-accent font-black uppercase tracking-widest px-2 py-0.5 bg-accent/5 rounded-md border border-accent/10">{dev.role}</span>
-                                    <span className="text-text-muted/30">|</span>
-                                    <span className={`text-[9px] font-black uppercase tracking-widest ${dev.isActive ? 'text-achievement' : 'text-danger'}`}>
-                                        {dev.isActive ? 'Active' : 'Disabled'}
-                                    </span>
-                                </div>
-                                <p className="text-xs text-text-muted font-bold truncate mt-2">{dev.email}</p>
-                            </div>
-
-                            <div className="shrink-0 flex flex-col items-end">
-                                <button
-                                    onClick={() => toggleDeveloperStatus(dev._id)}
-                                    disabled={isActionLoading}
-                                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${dev.isActive
-                                        ? 'bg-danger/5 text-danger hover:bg-danger hover:text-white'
-                                        : 'bg-achievement/5 text-achievement hover:bg-achievement hover:text-white'
-                                        }`}
-                                >
-                                    {dev.isActive ? 'Deactivate' : 'Activate'}
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="col-span-full py-24 text-center border-2 border-dashed border-border rounded-[32px]">
-                        <p className="text-text-muted font-black tracking-widest uppercase text-xs mb-4">
-                            {debouncedSearchQuery || roleFilter ? 'No matching production team members found.' : 'No production team members identified.'}
-                        </p>
-                        {debouncedSearchQuery || roleFilter ? (
-                            <p className="text-xs font-bold text-text-muted italic">Try adjusting your filters to find who you're looking for</p>
+            {/* Table */}
+            <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-y border-gray-200">
+                            <th className="px-6 py-3.5 text-xs font-semibold text-gray-700 uppercase tracking-wider">Team Member</th>
+                            <th className="px-6 py-3.5 text-xs font-semibold text-gray-700 uppercase tracking-wider">Contact</th>
+                            <th className="px-6 py-3.5 text-xs font-semibold text-gray-700 uppercase tracking-wider">Role</th>
+                            <th className="px-6 py-3.5 text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-3.5 text-xs font-semibold text-gray-700 uppercase tracking-wider text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                        {isLoading ? (
+                            Array(5).fill(0).map((_, i) => (
+                                <tr key={i} className="hover:bg-gray-50/50">
+                                    <td className="px-6 py-4">
+                                        <Skeleton className="h-5 w-32 mb-2 bg-gray-200" />
+                                        <Skeleton className="h-4 w-24 bg-gray-200" />
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <Skeleton className="h-5 w-40 mb-2 bg-gray-200" />
+                                        <Skeleton className="h-5 w-32 bg-gray-200" />
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <Skeleton className="h-7 w-24 rounded bg-gray-200" />
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <Skeleton className="h-7 w-20 rounded bg-gray-200" />
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <Skeleton className="h-9 w-28 ml-auto rounded-lg bg-gray-200" />
+                                    </td>
+                                </tr>
+                            ))
+                        ) : filteredDevelopers.length > 0 ? (
+                            filteredDevelopers.map((dev) => (
+                                <tr key={dev._id} className="hover:bg-blue-50/30 transition-colors duration-150 group">
+                                    <td className="px-6 py-4">
+                                        <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">{dev.name}</p>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <p className="text-sm text-gray-900">{dev.email}</p>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-wide">
+                                            {dev.role}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${dev.isActive 
+                                            ? 'bg-green-50 text-green-700 border border-green-100' 
+                                            : 'bg-red-50 text-red-700 border border-red-100'
+                                        }`}>
+                                            {dev.isActive ? 'Active' : 'Disabled'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <button
+                                            onClick={() => toggleDeveloperStatus(dev._id)}
+                                            disabled={isActionLoading}
+                                            className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border ${dev.isActive
+                                                ? 'bg-gradient-to-r from-red-50 to-red-50/50 text-red-600 hover:from-red-100 hover:text-red-700 border-red-200 hover:border-red-300'
+                                                : 'bg-gradient-to-r from-green-50 to-green-50/50 text-green-600 hover:from-green-100 hover:text-green-700 border-green-200 hover:border-green-300'
+                                                }`}
+                                        >
+                                            {dev.isActive ? 'Deactivate' : 'Activate'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
                         ) : (
-                            <button onClick={() => setIsAddModalOpen(true)} className="text-xs font-black text-accent uppercase hover:underline">Onboard your first member</button>
+                            <tr>
+                                <td colSpan="5" className="px-6 py-16 text-center">
+                                    <div className="max-w-sm mx-auto">
+                                        <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-gray-200 shadow-sm">
+                                            <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                            </svg>
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                                            {debouncedSearchQuery || roleFilter ? 'No matching team members' : 'No team members yet'}
+                                        </h3>
+                                        <p className="text-gray-500 text-sm mb-4">
+                                            {debouncedSearchQuery || roleFilter 
+                                                ? 'Try adjusting your search or filter to find what you\'re looking for.' 
+                                                : 'Get started by adding your first team member.'}
+                                        </p>
+                                        {debouncedSearchQuery || roleFilter ? (
+                                            <button 
+                                                onClick={() => { setSearchQuery(''); setRoleFilter(''); }}
+                                                className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                                            >
+                                                Clear filters
+                                            </button>
+                                        ) : (
+                                            <button 
+                                                onClick={() => setIsAddModalOpen(true)}
+                                                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-sm"
+                                            >
+                                                Add Your First Member
+                                            </button>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
                         )}
-                    </div>
-                )}
+                    </tbody>
+                </table>
             </div>
 
             <AddDeveloperForm
@@ -150,4 +210,3 @@ const AllDevelopers = ({ developers, isLoading }) => {
 };
 
 export default AllDevelopers;
-
