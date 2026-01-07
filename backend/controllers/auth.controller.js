@@ -143,7 +143,7 @@ export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({
       role: { $ne: "ADMIN" }
-    }).select("-password");
+    }).select("-password").sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,

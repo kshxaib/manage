@@ -22,7 +22,7 @@ export const useDeveloperStore = create((set, get) => ({
         set({ isLoading: true });
         try {
             const { data } = await axiosInstance.post('/auth/register', developerData);
-            set(state => ({ developers: [...state.developers, data.user] }));
+            set(state => ({ developers: [data.user, ...state.developers] }));
             toast.success(data.message || 'Developer created successfully');
             return true;
         } catch (error) {

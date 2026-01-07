@@ -22,7 +22,7 @@ export const useClientStore = create((set, get) => ({
         set({ isLoading: true });
         try {
             const { data } = await axiosInstance.post('/clients', clientData);
-            set(state => ({ clients: [...state.clients, data.client] }));
+            set(state => ({ clients: [data.client, ...state.clients] }));
             toast.success(data.message || 'Client created successfully');
             return true;
         } catch (error) {

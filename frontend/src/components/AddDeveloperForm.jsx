@@ -35,12 +35,18 @@ const AddDeveloperForm = ({ isOpen, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = await createDeveloper(formData);
-        if (success) {
-            // No reset immediately so admin can copy after creation if they forgot
-            toast.info("You can copy the credentials now before closing the modal", { duration: 5000 });
+
+        try {
+            onClose();
+            await createDeveloper(formData);
+            copyCredentials();
+            toast.success("Account created! Credentials copied to clipboard.");
+        } catch (error) {
+            console.error("Form submission error:", error);
+            toast.error("Failed to create account");
         }
     };
+
 
     if (!isOpen) return null;
 

@@ -34,7 +34,7 @@ export const useProjectStore = create((set, get) => ({
         set({ isLoading: true });
         try {
             const { data } = await axiosInstance.post('/projects', projectData);
-            set(state => ({ projects: [...state.projects, data.project] }));
+            set(state => ({ projects: [data.project, ...state.projects] }));
             toast.success(data.message || 'Project created successfully');
             return true;
         } catch (error) {
